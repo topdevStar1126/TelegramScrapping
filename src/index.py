@@ -126,16 +126,6 @@ client = TelegramClient(
     timeout=30
 )
 
-# Event listener for new messages in the channel
-@client.on(events.NewMessage(chats=Config.CHANNEL_ID))
-async def handle_new_message(event):
-    message = event.message
-    print('📩 New Message Received:', {
-        'id': message.id,
-        'date': datetime.fromtimestamp(message.date.timestamp()),
-        'text': message.text
-    })
-
 async def main():
     print('Connecting to Telegram...')
     await client.start()
@@ -147,6 +137,17 @@ async def main():
         await client.send_code_request(phone)
         code = input('Enter the code you received: ')
         await client.sign_in(phone, code)
+
+    
+    # Event listener for new messages in the channel
+    @client.on(events.NewMessage(chats=Config.CHANNEL_ID))
+    async def handle_new_message(event):
+        message = event.message
+        print('📩 New Message Received:', {
+            'id': message.id,
+            'date': datetime.fromtimestamp(message.date.timestamp()),
+            'text': message.text
+        })
 
     print('✅ Listening for new messages...')
     await client.run_until_disconnected()  # Keep script running
