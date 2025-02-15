@@ -126,31 +126,36 @@ client = TelegramClient(
     timeout=30
 )
 
-async def main():
-    print('Connecting to Telegram...')
-    await client.start()
-    print('Connected...')
-    # Ensure authentication
+# Ensure client is connected
+async def start_client():
+    await client.connect()
+    
     if not await client.is_user_authorized():
-        phone = input('Phone number (include country code, e.g., +1234567890): ')
-        print('Sending code to:', phone)
+        print("🔴 Not authorized! Please log in.")
+        phone = input("📱 Enter phone number (e.g., +1234567890): ")
         await client.send_code_request(phone)
-        code = input('Enter the code you received: ')
+        code = input("📩 Enter the code you received: ")
         await client.sign_in(phone, code)
 
-    
-    # Event listener for new messages in the channel
-    @client.on(events.NewMessage(chats=Config.CHANNEL_ID))
-    async def handle_new_message(event):
-        message = event.message
-        print('📩 New Message Received:', {
-            'id': message.id,
-            'date': datetime.fromtimestamp(message.date.timestamp()),
-            'text': message.text
-        })
+    print("✅ Client connected and authorized!")
 
-    print('✅ Listening for new messages...')
-    await client.run_until_disconnected()  # Keep script running
+# Debugging: Print all incoming messages
+@client.on(events.NewMessage(pattern=".*"))  # Listens to all new messages
+async def handle_new_message(event):
+    try:
+        chat = await event.get_chat()
+        message_text = event.message.text or "📂 [Non-text message]"
+        print(f"📩 New message in {chat.title} ({event.chat_id}): {message_text}")
 
+    except Exception as e:
+        print(f"⚠️ Error processing message: {e}")
+
+# Start listening for new messages
+async def main():
+    await start_client()
+    print("🚀 Listening for new messages...")
+    await client.run_until_disconnected()
+
+# Run the script
 if __name__ == "__main__":
     asyncio.run(main())
