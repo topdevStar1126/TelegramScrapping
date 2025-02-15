@@ -7,7 +7,7 @@ from datetime import datetime
 # Config
 class Config:
     BOT_TOKEN = "8151983253:AAH3kJebKs89moyrmzFv4JW09kSm4hbPhFQ"
-    CHANNEL_ID = -1002418565988
+    CHANNEL_ID = -1001717037581
     API_ID = 24876084
     API_HASH = "a1934a433c25897914d5c23803a38444"
 
