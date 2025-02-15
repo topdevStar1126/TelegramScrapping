@@ -132,7 +132,7 @@ async def handle_new_message(event):
 async def main():
     print('Connecting to Telegram...')
     await client.start()
-
+    print('Connected...')
     # Ensure authentication
     if not await client.is_user_authorized():
         phone = input('Phone number (include country code, e.g., +1234567890): ')
