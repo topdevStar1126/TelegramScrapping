@@ -139,23 +139,41 @@ async def start_client():
 
     print("✅ Client connected and authorized!")
 
-# Debugging: Print all incoming messages
-@client.on(events.NewMessage(pattern=".*"))  # Listens to all new messages
+# Ensure client is connected
+async def start_client():
+    await client.connect()
+    
+    if not await client.is_user_authorized():
+        print("🔴 Not authorized! Please log in.")
+        phone = input("📱 Enter phone number (e.g., +1234567890): ")
+        await client.send_code_request(phone)
+        code = input("📩 Enter the code you received: ")
+        await client.sign_in(phone, code)
+
+    print("✅ Client connected and authorized!")
+
+# Debugging: Print all messages to verify event listener is working
+@client.on(events.NewMessage)
+async def debug_all_messages(event):
+    print(f"🔍 DEBUG - New Message from {event.chat_id}: {event.message.text}")
+
+# Listen for new messages only in the target channel
+@client.on(events.NewMessage(chats=Config.CHANNEL_ID))
 async def handle_new_message(event):
     try:
-        chat = await event.get_chat()
         message_text = event.message.text or "📂 [Non-text message]"
-        print(f"📩 New message in {chat.title} ({event.chat_id}): {message_text}")
+        print(f"📩 New message in channel {Config.CHANNEL_ID}: {message_text}")
 
     except Exception as e:
         print(f"⚠️ Error processing message: {e}")
 
-# Start listening for new messages
+# Run the Telegram client
 async def main():
     await start_client()
     print("🚀 Listening for new messages...")
     await client.run_until_disconnected()
 
-# Run the script
+# Start the script
 if __name__ == "__main__":
     asyncio.run(main())
+
