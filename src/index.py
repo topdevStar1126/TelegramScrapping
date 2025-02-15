@@ -13,7 +13,7 @@ class Config:
 
 
 # Session string (replace with your session string)
-session = StringSession('1BCABBnwE6PAEAAAAAAAAAAoBu2Pf00bu_7g6kFy7F_QWJXxP-s8l666K3gqyeeuW2nj2AWq4CtjANAHtNjKf6c9sajkhmiS5YlXK9A7VIqzgMrxfcANNktR8JqkdvRKJtFv5kt_1K4xIU3kjXaG7nOqljlejN8HrqsiWRZiOATAWItIgRwmu8eDRFvafZGghdCSl3ExpFTcea1jzWML4KZylM54qWV342b22txniRdkKJe441yQ5yvKMQ-AxK_yQ9VU3iY_tRP8ZKa65RkwTXxUZ0E0k4R2JjnqzrjfhOlVQeFVmUZqa7Gwgpnjo88Y_UCe05OP1IWG0RyrMfSUgPop0k1oKFb1ISBfTrXwhXA7Q6Vs=')
+session = StringSession('')
 
 async def main():
     print('Initializing...')
