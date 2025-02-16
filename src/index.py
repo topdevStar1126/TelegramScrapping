@@ -76,6 +76,7 @@ async def main():
     async def handler(event):
         message = event.message
         signal = parse_trading_signal(message.text)
+        print(message);
         
         if signal:
             # Format the extracted information
