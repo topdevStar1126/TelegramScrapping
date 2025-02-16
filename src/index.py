@@ -74,6 +74,10 @@ async def main():
 
     @client.on(events.NewMessage(chats=[Config.CHANNEL_ID]))
     async def handler(event):
+        if event.message.reply_to:
+        # print("Ignoring replied message")
+            return
+
         message = event.message
         signal = parse_trading_signal(message.text)
         print(message);
