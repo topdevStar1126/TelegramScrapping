@@ -7,13 +7,13 @@ from datetime import datetime
 # Config
 class Config:
     BOT_TOKEN = "8151983253:AAH3kJebKs89moyrmzFv4JW09kSm4hbPhFQ"
-    CHANNEL_ID = -1001717037581
+    CHANNEL_ID = -1002418565988
     API_ID = 24876084
     API_HASH = "a1934a433c25897914d5c23803a38444"
 
 
 # Session string (replace with your session string)
-session = StringSession('1BSABCyjyP_AFAAAAAAAAAAoBu2RXpXVswqDYtlZz1ltquOOEnkjGnbOiQBiqDEmULPUHxsdlcH5yI7r6wPwyO8SUp5rwJ61n8Y85kgXnZIKr9WwFyTCj5GFHvf_NX6FLCX6SofagfRZ1w54B0EF-L-ql70690fsFZl0wkwiEWmUcu4_fnoelVtXDOCNkhWkL5IQrp-b3RDju3CaW9T1OQwrxzE63kb06ahpqh2l7MvW_jaCdAk4IEzHIr7yKxGmfHW15z21o89NuIGseSmSN32wNIcZ_YfxJXAad1my0leYKIuLTOqiBP4-9NR6qlqKbn59FM94wp7S38QyTqVGJ3mIa7wOrviFudmYP_m48lmdvOlQ=')
+session = StringSession('')
 
 async def main():
     print('Initializing...')
@@ -38,7 +38,7 @@ async def main():
     try:
         print('Connecting...')
         await client.connect()
-        
+
         print('Starting authentication...')
         if not await client.is_user_authorized():
             # Phone number authentication
@@ -54,6 +54,9 @@ async def main():
             if await client.is_user_authorized():
                 print('Authentication successful!')
                 print('\nYour session string (save this):', client.session.save())
+        
+        await client.send_message(-1002451169737, "Your message here")
+        print("Message sent successfully!");
 
         print('Listening for new messages...')
         await client.run_until_disconnected()
