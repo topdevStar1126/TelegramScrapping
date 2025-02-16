@@ -32,7 +32,7 @@ def parse_trading_signal(message: str):
         # Extract symbol and position type
         symbol_info = header.split(' ')[1]  # "#AUCTION/USDT"
         symbol = symbol_info.replace('#', '')
-        position_type = 'LONG' if 'Long📈' in header else 'SHORT' if 'Short📉' in header else None
+        position_type = 'LONG' if 'Long' in header else 'SHORT' if 'Short' in header else None
         leverage = header.split('x')[1].strip('🔥 )')  # "20"
         
         # Extract entry price
