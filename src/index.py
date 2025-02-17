@@ -7,13 +7,13 @@ from datetime import datetime
 # Config
 class Config:
     BOT_TOKEN = "8151983253:AAH3kJebKs89moyrmzFv4JW09kSm4hbPhFQ"
-    CHANNEL_ID = -1002418565988
+    CHANNEL_ID = -1001717037581
     API_ID = 24876084
     API_HASH = "a1934a433c25897914d5c23803a38444"
 
 
 # Session string (replace with your session string)
-session = StringSession('1BCABBnwE6PAEAAAAAAAAAAoBuw3TWMp_6Bg2FUdx9gZOR80ltWpc_gs29MqVcl7SyiV5Tgy66vINYEokf1YAnfV_7qXCmwbZAQDp7-GXlEJI-i-vL6D4CmNfhGlvyCEflHXULmpyCS3YyjG6wxoIDL1jVWy4G6UOFYGIlMuslJENj2obtrUIUDzvO6ME22c_9xbNMWkRLDH4n7usA9ygWEXKg57BkeGV90zxPWU4rCJ4zSFfF5WdhG6fCMxnOUs_AoOMCNQsuDC8-7wuuGB_WkwoAv9JXAJQ5MYlNdFrfvdGHjmYc8f761cIUWG_NA-HqEUeFguCKHSMJJJ5ZhUJaXU4coXOPcojNQGHtOOMsBgzzlA=')
+session = StringSession('')
 
 def parse_trading_signal(message: str):
     try:
@@ -143,9 +143,6 @@ async def main():
             if await client.is_user_authorized():
                 print('Authentication successful!')
                 print('\nYour session string (save this):', client.session.save())
-        
-        await client.send_message(-1002451169737, "Your message here")
-        print("Message sent successfully!");
 
         print('Listening for new messages...')
         await client.run_until_disconnected()
