@@ -19,40 +19,59 @@ def parse_trading_signal(message: str):
     try:
         # Split message into lines and remove empty lines
         lines = [line.strip() for line in message.split('\n') if line.strip()]
-        
-        # Validate basic structure
-        if len(lines) < 6:  # At least header, entry, and 4 TP levels
+        # First line should contain trading pair and leverage
+        first_line = lines[0]
+        # Look for trading pair (any word containing /)
+        symbol = next((word for word in first_line.split() if '/' in word), None)
+        if not symbol:
             return None
-            
-        # Parse header
-        header = lines[0]
-        if not header.startswith('🔥'):
+        # Position type
+        position_type = 'LONG' if 'Long' in first_line else 'SHORT' if 'Short' in first_line else None
+        if not position_type:
             return None
-            
-        # Extract symbol and position type
-        symbol_info = header.split(' ')[1]  # "#AUCTION/USDT"
-        symbol = symbol_info.replace('#', '')
-        position_type = 'LONG' if 'Long' in header else 'SHORT' if 'Short' in header else None
-        leverage = header.split('x')[1].strip('🔥 )')  # "20"
+        # Find leverage (number followed by x)
+        leverage = None
+        for word in first_line.split():
+            if 'x' in word.lower():
+                try:
+                    leverage = int(''.join(filter(str.isdigit, word)))
+                    break
+                except:
+                    continue
+        if not leverage:
+            return None
         
-        # Extract entry price
-        entry_line = lines[1]
-        entry_price = float(entry_line.split('-')[1].strip())
+        # Entry price - look for number in second line
+        try:
+            entry_price = float(''.join(c for c in lines[1].split('-')[1] if c.isdigit() or c == '.'))
+        except:
+            return None
         
-        # Extract take profit levels
+        # Take profit levels - look for numbers and percentages
         tp_levels = []
-        for line in lines[3:7]:  # 4 TP levels
-            price = float(line.split(' ')[1])
-            percentage = int(line.split('(')[1].split('%')[0])
-            tp_levels.append({
-                'price': price,
-                'percentage': percentage
-            })
+        for line in lines[3:7]:  # Expect 4 TP levels
+            try:
+                # Find first number in line for price
+                numbers = ''.join(c for c in line if c.isdigit() or c == '.')
+                price = float(numbers)
+                
+                # Find percentage
+                percentage = int(''.join(filter(str.isdigit, line.split('(')[1].split('%')[0])))
+                
+                tp_levels.append({
+                    'price': price,
+                    'percentage': percentage
+                })
+            except:
+                continue
+        
+        if len(tp_levels) != 4:
+            return None
         
         return {
             'symbol': symbol,
             'position_type': position_type,
-            'leverage': int(leverage),
+            'leverage': leverage,
             'entry_price': entry_price,
             'take_profit_levels': tp_levels
         }
